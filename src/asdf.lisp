@@ -2,7 +2,7 @@
 
 (eval-when (:compile-toplevel :load-toplevel :execute)
   (defclass closure-template-file (asdf:cl-source-file)
-    ((type :initform "tmpl"))))
+    ((type :initform "soy"))))
 
 (defun process-template (input-file output-fasl-file)
   (let ((output-lisp-file (merge-pathnames
@@ -12,8 +12,8 @@
 				   :direction :output
 				   :if-exists :supersede)
       (with-standard-io-syntax 
-	(print (translate-template :common-lisp-backend
-				   input-file)
+	(print `(closure-template:compile-template :common-lisp-backend
+						   ,input-file)
 	       source-stream)))
     output-lisp-file))
 
